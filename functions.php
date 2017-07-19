@@ -553,3 +553,13 @@ add_action( 'create_category', 'primer_has_active_categories_reset' );
 add_action( 'edit_category',   'primer_has_active_categories_reset' );
 add_action( 'delete_category', 'primer_has_active_categories_reset' );
 add_action( 'save_post',       'primer_has_active_categories_reset' );
+
+add_filter('wp_nav_menu_items', 'add_login_logout_link', 10, 2);
+function add_login_logout_link($items, $args) {
+        ob_start();
+        wp_loginout('index.php');
+        $loginoutlink = ob_get_contents();
+        ob_end_clean();
+        $items .= '<li>'. $loginoutlink .'</li>';
+    return $items;
+}
