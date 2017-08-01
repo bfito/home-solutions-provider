@@ -565,3 +565,56 @@ function add_login_logout_link($items, $args) {
         $items .= '<li>'. $loginoutlink .'</li>';
     return $items;
 }
+
+/**
+*Gravity Form Button
+*/
+/**
+ * Helper Functions for Gravity Forms.
+ * @package Leaven
+ */
+add_filter( 'gform_shortcode_button', 'leaven_gravity_button_shortcode', 40, 3 );
+/**
+ * Add the "button" action to the gravityform shortcode
+ * e.g. [gravityform id="1" action="button" text="button text"]
+ * @param $shortcode_string
+ * @param $attributes
+ * @param $content
+ *
+ * @return string|void
+ */
+function leaven_gravity_button_shortcode( $shortcode_string, $attributes, $content ) {
+	if ( 'button' !== $attributes['action'] ) {
+		return $shortcode_string;
+	}
+	$defaults = array(
+		'title'        => true,
+		'description'  => false,
+		'id'           => 0,
+		'name'         => '',
+		'field_values' => '',
+		'tabindex'     => 1,
+		'text'         => __( 'Click to open form', 'leaven' ),
+	);
+	$attributes = wp_parse_args( $attributes, $defaults );
+	if ( $attributes['id'] < 1 ) {
+		return __( 'Missing the ID attribute.', 'leaven' );
+	}
+	return leaven_build_gravity_button( $attributes );
+}
+/**
+ * Build the button/form output.
+ * @param $attributes array shortcode arguments
+ *
+ * @return string
+ */
+function leaven_build_gravity_button( $attributes ) {
+	$form_id = absint( $attributes['id'] );
+	$text    = esc_attr( $attributes['text'] );
+	$onclick = "jQuery('#gravityform_button_{$form_id}, #gravityform_container_{$form_id}').slideToggle();";
+	$html  = sprintf( '<button id="gravityform_button_%1$d" class="gravity_button" onclick="%2$s">%3$s</button>', esc_attr( $form_id ), $onclick, esc_attr( $text ) );
+	$html .= sprintf( '<div id="gravityform_container_%1$d" class="gravity_container" style="display:none;">', esc_attr( $form_id ) );
+	$html .= gravity_form( $form_id, $attributes['title'], $attributes['description'], false, $attributes['field_values'], true, $attributes['tabindex'], false );
+	$html .= '</div>';
+	return $html;
+}
