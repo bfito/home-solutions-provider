@@ -19,6 +19,9 @@
 	<link rel="profile" href="http://gmpg.org/xfn/11">
 	<link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>">
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="<?php bloginfo('template_directory'); ?>">/assets/js/jquery-1.4.2.js</script>
+<script src="<?php bloginfo('template_directory'); ?>">/assets/js/jquery.sheepItPlugin-1.1.1.js</script>
+
 	<?php wp_head(); ?>
 
 </head>
